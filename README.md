@@ -1,4 +1,4 @@
-# ParkControl - Actividad U3 (Testing y Validaciones)
+# ParkControl - Testing y Validaciones (Actividad U3 - BDD & AAA)
 <img width="120" height="67" alt="image" src="https://github.com/user-attachments/assets/9ab50188-6712-4a50-ab1f-4dc684d6704a" /><br/>
 Maestría en Arquitectura de Software <br/>
 Hecho por: **Yerlinson Maturana Serna** <br/>
