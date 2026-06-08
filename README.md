@@ -48,7 +48,8 @@ npm run coverage
 ```
 
 Resultado verificado:
-<img width="591" height="442" alt="image" src="https://github.com/user-attachments/assets/52fc1d0d-e44c-4357-9f77-5acbbfe7fb0c" />
+
+<img width="591" height="442" alt="image" src="https://github.com/user-attachments/assets/52fc1d0d-e44c-4357-9f77-5acbbfe7fb0c" /><br/>
 
 ```text
 tests 15
