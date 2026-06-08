@@ -2,6 +2,7 @@
 <img width="120" height="67" alt="image" src="https://github.com/user-attachments/assets/9ab50188-6712-4a50-ab1f-4dc684d6704a" /><br/>
 Maestría en Arquitectura de Software <br/>
 Hecho por: **Yerlinson Maturana Serna** <br/>
+
 <img width="1298" height="806" alt="image" src="https://github.com/user-attachments/assets/12e22253-99de-4edd-bae2-8bbd141344ab" />
 
 ParkControl es un proyecto Node.js para administrar la operacion basica de un parqueadero publico en Colombia: ingresos, salidas, disponibilidad por tipo de vehiculo, liquidacion, factura en COP e historial reciente.
