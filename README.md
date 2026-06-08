@@ -1,5 +1,7 @@
 # ParkControl
 
+<img width="1298" height="806" alt="image" src="https://github.com/user-attachments/assets/12e22253-99de-4edd-bae2-8bbd141344ab" />
+
 ParkControl es un proyecto Node.js para administrar la operacion basica de un parqueadero publico en Colombia: ingresos, salidas, disponibilidad por tipo de vehiculo, liquidacion, factura en COP e historial reciente.
 
 ## Funcionalidades
