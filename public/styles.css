@@ -1723,3 +1723,16 @@ body.modal-open {
   width: 100%;
   margin-top: 8px;
 }
+
+.hero-credit {
+  margin: 4px 0 0;
+  color: rgba(255, 255, 255, .82);
+  font-size: .86rem;
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+
+.hero-credit strong {
+  color: #fff;
+  font-weight: 900;
+}
