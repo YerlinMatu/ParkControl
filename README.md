@@ -1,4 +1,5 @@
-# ParkControl
+# ParkControl - Actividad U3 (Testing y Validaciones)
+- Yerlinson Maturana Serna
 <img width="120" height="67" alt="image" src="https://github.com/user-attachments/assets/9ab50188-6712-4a50-ab1f-4dc684d6704a" />
 <img width="1298" height="806" alt="image" src="https://github.com/user-attachments/assets/12e22253-99de-4edd-bae2-8bbd141344ab" />
 
