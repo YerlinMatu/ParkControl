@@ -85,6 +85,21 @@ npm run coverage: src 100% lineas, 100% ramas, 100% funciones
 npm run e2e: 2 passed
 ```
 
+## Integracion continua
+
+El repositorio incluye GitHub Actions en `.github/workflows/ci.yml`. El pipeline se ejecuta en `push`, `pull_request` y manualmente con `workflow_dispatch`.
+
+Checks del job principal:
+
+```bash
+npm test
+npm run integration
+npm run coverage
+npm run e2e
+```
+
+Tambien hay un job de rendimiento que ejecuta `npm run perf` contra el servidor local y falla si algun escenario reporta errores.
+
 ## Rendimiento y carga
 
 La entrega de Unidad 5 incluye pruebas de rendimiento para los flujos principales de ParkControl.
