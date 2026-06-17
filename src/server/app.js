@@ -34,17 +34,38 @@ async function saveLot(lot) {
   await store.write(lot.toJSON());
 }
 
-async function serveStatic(request, response) {
-  const url = new URL(request.url, 'http://localhost');
-  const requestedPath = url.pathname === '/' ? '/index.html' : url.pathname;
+let lotOperation = Promise.resolve();
+
+async function updateLot(action) {
+  const operation = lotOperation.then(async () => {
+    const lot = await loadLot();
+    const result = action(lot);
+    await saveLot(lot);
+    return result;
+  });
+
+  lotOperation = operation.catch(() => {});
+  return operation;
+}
+
+export function resolveStaticFilePath(pathname) {
+  const requestedPath = pathname === '/' ? '/index.html' : pathname;
   const filePath = resolve(publicDir, `.${requestedPath}`);
 
   if (!filePath.startsWith(publicDir)) {
-    sendError(response, new Error('Ruta no permitida.'), 403);
-    return;
+    const error = new Error('Ruta no permitida.');
+    error.statusCode = 403;
+    throw error;
   }
 
+  return filePath;
+}
+
+async function serveStatic(request, response) {
+  const url = new URL(request.url, 'http://localhost');
+
   try {
+    const filePath = resolveStaticFilePath(url.pathname);
     const fileStat = await stat(filePath);
     if (!fileStat.isFile()) {
       throw new Error('No encontrado.');
@@ -61,9 +82,9 @@ async function serveStatic(request, response) {
 
 async function handleApi(request, response) {
   const url = new URL(request.url, 'http://localhost');
-  const lot = await loadLot();
 
   if (request.method === 'GET' && url.pathname === '/api/dashboard') {
+    const lot = await loadLot();
     sendJson(response, 200, {
       ok: true,
       occupancy: lot.getOccupancy(),
@@ -76,16 +97,14 @@ async function handleApi(request, response) {
 
   if (request.method === 'POST' && url.pathname === '/api/entries') {
     const payload = await readJsonBody(request);
-    const ticket = lot.registerEntry(payload);
-    await saveLot(lot);
+    const ticket = await updateLot((currentLot) => currentLot.registerEntry(payload));
     sendJson(response, 201, { ok: true, ticket });
     return;
   }
 
   if (request.method === 'POST' && url.pathname === '/api/exits') {
     const payload = await readJsonBody(request);
-    const ticket = lot.closeTicket(payload);
-    await saveLot(lot);
+    const ticket = await updateLot((currentLot) => currentLot.closeTicket(payload));
     sendJson(response, 200, { ok: true, ticket });
     return;
   }
@@ -105,13 +124,5 @@ export function createParkingServer() {
     } catch (error) {
       sendError(response, error);
     }
-  });
-}
-
-if (import.meta.url === `file://${process.argv[1]}`) {
-  const port = Number(process.env.PORT ?? 3000);
-  const host = process.env.HOST ?? '127.0.0.1';
-  createParkingServer().listen(port, host, () => {
-    console.log(`ParkControl disponible en http://${host}:${port}`);
   });
 }

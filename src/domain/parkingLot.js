@@ -7,10 +7,16 @@ const DEFAULT_CAPACITY = {
 };
 
 export class ParkingLot {
-  constructor({ capacity = DEFAULT_CAPACITY, tariffs = DEFAULT_TARIFFS, tickets = [] } = {}) {
-    this.capacity = { ...capacity };
-    this.tariffs = { ...tariffs };
-    this.tickets = tickets.map((ticket) => ({ ...ticket }));
+  constructor(config) {
+    const source = Object.assign({
+      capacity: DEFAULT_CAPACITY,
+      tariffs: DEFAULT_TARIFFS,
+      tickets: []
+    }, config);
+
+    this.capacity = { ...source.capacity };
+    this.tariffs = { ...source.tariffs };
+    this.tickets = source.tickets.map((ticket) => ({ ...ticket }));
   }
 
   getOpenTickets() {
@@ -25,7 +31,9 @@ export class ParkingLot {
     const occupied = Object.fromEntries(Object.keys(this.capacity).map((type) => [type, 0]));
 
     for (const ticket of this.getOpenTickets()) {
-      occupied[ticket.vehicleType] = (occupied[ticket.vehicleType] ?? 0) + 1;
+      if (Object.hasOwn(occupied, ticket.vehicleType)) {
+        occupied[ticket.vehicleType] += 1;
+      }
     }
 
     return Object.fromEntries(
@@ -33,8 +41,8 @@ export class ParkingLot {
         vehicleType,
         {
           total,
-          occupied: occupied[vehicleType] ?? 0,
-          available: total - (occupied[vehicleType] ?? 0)
+          occupied: occupied[vehicleType],
+          available: total - occupied[vehicleType]
         }
       ])
     );

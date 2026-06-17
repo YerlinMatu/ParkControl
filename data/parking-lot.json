@@ -45,6 +45,35 @@
         "tax": 542,
         "total": 3392
       }
+    },
+    {
+      "id": "eb382701-3486-4db1-b3b0-38f7e14c33a2",
+      "plate": "ISS288",
+      "vehicleType": "motorcycle",
+      "ownerName": "Ana Perez",
+      "entryTime": "2026-06-08T19:19:09.253Z",
+      "status": "closed",
+      "exitTime": "2026-06-08T19:57:29.597Z",
+      "invoice": {
+        "number": "FE-2026-2",
+        "currency": "COP",
+        "vehicleType": "motorcycle",
+        "vehicleLabel": "Motocicleta",
+        "chargedMinutes": 39,
+        "billableMinutes": 39,
+        "subtotal": 1755,
+        "taxRate": 0.19,
+        "tax": 333,
+        "total": 2088
+      }
+    },
+    {
+      "id": "65f1a9eb-1685-4e07-a0a0-e1d12d75296c",
+      "plate": "ISE288",
+      "vehicleType": "car",
+      "ownerName": "",
+      "entryTime": "2026-06-08T19:57:22.943Z",
+      "status": "open"
     }
   ]
 }

@@ -1,43 +1,82 @@
 # Evidencia de ejecucion de pruebas de ParkControl
 
-Fecha de verificacion: 2026-06-08
+Fecha de verificacion: 2026-06-17
 
-## Comando de pruebas
+## Pruebas automatizadas Node
 
 ```bash
 npm test
 ```
 
-Resultado:
+Resultado verificado:
 
 ```text
-tests 15
-suites 3
-pass 15
+tests 33
+suites 6
+pass 33
 fail 0
 cancelled 0
 skipped 0
 todo 0
 ```
 
-## Comando de cobertura
+Estas pruebas cubren reglas de negocio, calculo tarifario, persistencia JSON, pruebas de integracion entre dominio/storage, utilidades HTTP y flujos e2e a nivel servidor/API.
+
+## Pruebas de integracion
+
+```bash
+npm run integration
+```
+
+Resultado verificado:
+
+```text
+tests 3
+suites 1
+pass 3
+fail 0
+```
+
+La evidencia detallada esta en `docs/evidencia-integracion.md`.
+
+## Cobertura estricta de codigo fuente
 
 ```bash
 npm run coverage
 ```
 
-Resultado:
+Resultado verificado sobre `src/**/*.js`:
 
 ```text
-file                           | line % | branch % | funcs %
-src/domain/parkingLot.js       |  94.59 |    87.50 |   87.50
-src/domain/tariffCalculator.js |  95.00 |    76.92 |  100.00
-src/server/httpUtils.js        |  65.63 |    85.71 |   33.33
-all files                      |  94.49 |    90.28 |   91.67
+file                  | line % | branch % | funcs %
+src/domain            | 100.00 | 100.00   | 100.00
+src/server            | 100.00 | 100.00   | 100.00
+src/storage           | 100.00 | 100.00   | 100.00
+all files             | 100.00 | 100.00   | 100.00
 ```
+
+El script de cobertura exige umbrales de 100% en lineas, ramas y funciones. Si baja cualquier metrica, el comando falla.
+
+## Pruebas e2e reales de navegador
+
+```bash
+npm run e2e
+```
+
+Resultado verificado:
+
+```text
+2 passed
+```
+
+Para una demostracion visible y lenta:
+
+```bash
+npm run e2e:demo
+```
+
+Esta variante abre Chromium y ejecuta el flujo con pausa aproximada de 1.2 segundos entre acciones.
 
 ## Interpretacion
 
-La cobertura global de lineas es 94.49%, superior al 75% solicitado en la guia. Las pruebas se concentran en reglas de negocio criticas para evitar regresiones en calculo de tarifas, control de cupos, duplicidad de placas y liquidacion de salidas.
-
-La utilidad `httpUtils` tiene menor cobertura individual porque las funciones de respuesta HTTP se validan indirectamente desde el servidor en ejecucion, mientras que la lectura y validacion de JSON si cuenta con pruebas unitarias directas.
+ParkControl cuenta con cuatro niveles de verificacion: pruebas unitarias de dominio, pruebas de integracion, cobertura estricta del codigo fuente y e2e visuales de navegador. Esto permite demostrar tanto calidad interna como comportamiento observable desde la interfaz.

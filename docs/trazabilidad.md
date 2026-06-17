@@ -12,3 +12,9 @@
 | Generar factura en pesos colombianos | `ParkingLot.closeTicket` | TC-10 |
 | Consultar historial operativo | `ParkingLot.getHistory` | TC-12 |
 | Procesar solicitudes JSON | `readJsonBody` | TC-13, TC-14, TC-15 |
+
+
+## Pruebas de integracion
+
+- `test/parkingLot.integration.test.js`: valida integracion entre dominio, tarifas y persistencia JSON.
+- `docs/evidencia-integracion.md`: documenta escenarios, comando y resultado verificado.

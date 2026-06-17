@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { calculateParkingCharge, normalizePlate, validateVehicleType } from '../src/domain/tariffCalculator.js';
+import { calculateParkingCharge, getVehicleLabel, normalizePlate, validateVehicleType } from '../src/domain/tariffCalculator.js';
 
 describe('Tariff calculator - Given entradas y salidas de vehiculos', () => {
   it('Given una placa con espacios When se normaliza Then queda en mayusculas', () => {
@@ -10,6 +10,26 @@ describe('Tariff calculator - Given entradas y salidas de vehiculos', () => {
   it('Given una placa invalida When se normaliza Then falla la validacion', () => {
     assert.throws(() => normalizePlate('??'), /placa/i);
   });
+
+  it('Given placa no textual When se normaliza Then exige placa obligatoria', () => {
+    assert.throws(() => normalizePlate(null), /obligatoria/i);
+  });
+
+  it('Given fechas invalidas When se liquida Then reporta fechas no validas', () => {
+    assert.throws(
+      () => calculateParkingCharge({
+        vehicleType: 'car',
+        entryTime: 'fecha-mala',
+        exitTime: '2026-06-08T11:00:00.000Z'
+      }),
+      /validas/i
+    );
+  });
+
+  it('Given etiqueta desconocida When se consulta Then devuelve el tipo recibido', () => {
+    assert.equal(getVehicleLabel('scooter'), 'scooter');
+  });
+
 
   it('Given un tipo de vehiculo desconocido When se valida Then rechaza la operacion', () => {
     assert.throws(() => validateVehicleType('truck'), /no soportado/i);

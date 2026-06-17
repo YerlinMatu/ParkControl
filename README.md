@@ -21,7 +21,7 @@ ParkControl es un proyecto Node.js para administrar la operacion basica de un pa
 ## Requisitos
 
 - Node.js 22 o superior.
-- No requiere instalar dependencias externas.
+- Ejecutar `npm install` para instalar las dependencias de desarrollo, incluyendo Playwright.
 
 ## Ejecucion
 
@@ -47,16 +47,67 @@ npm test
 npm run coverage
 ```
 
+## Pruebas de integracion
+
+Las pruebas de integracion validan que dominio, calculo tarifario y persistencia JSON trabajen juntos. Cubren registro, recarga desde storage, liquidacion, factura persistida, bloqueo de duplicados, sobrecupo y consecutivos de factura.
+
+```bash
+npm run integration
+```
+
+## Pruebas e2e de navegador
+
+ParkControl incluye pruebas e2e reales con Playwright. Estas abren Chromium, interactuan con la interfaz, registran una entrada, liquidan una salida, validan la factura de tirilla en modal y comprueban mensajes de error visibles.
+
+```bash
+npm run e2e
+```
+
+Para ver el navegador durante la ejecucion:
+
+```bash
+npm run e2e:headed
+```
+
+Para una demostracion mas lenta y facil de ver, con navegador visible y pausa aproximada de 1.2 segundos entre acciones:
+
+```bash
+npm run e2e:demo
+```
+
 Resultado verificado:
 
 <img width="591" height="442" alt="image" src="https://github.com/user-attachments/assets/52fc1d0d-e44c-4357-9f77-5acbbfe7fb0c" /><br/>
 
 ```text
-tests 15
-pass 15
-fail 0
-coverage all files: 94.49% lineas, 90.28% ramas, 91.67% funciones
+npm test: tests 33, pass 33, fail 0
+npm run coverage: src 100% lineas, 100% ramas, 100% funciones
+npm run e2e: 2 passed
 ```
+
+## Rendimiento y carga
+
+La entrega de Unidad 5 incluye pruebas de rendimiento para los flujos principales de ParkControl.
+
+Equipo Unidad 05:
+
+- Yerlinson Maturana Serna
+- Brayan Estif Calderon Gomez
+- Sadane Geronimo Miguel Santiago Acevedo Virgues
+- Julian Camilo Corredor Rojas
+
+```bash
+npm run perf
+```
+
+Este comando genera resultados en `performance/results/`:
+
+- `performance-summary.json`: metricas consolidadas.
+- `performance-summary.md`: tabla resumen.
+- `performance-results.csv`: muestras por solicitud.
+- `throughput-chart.svg`: grafica de throughput.
+
+Tambien se incluye el plan JMeter `performance/ParkControl_LoadTest.jmx` y el reporte `docs/reporte-rendimiento-carga.md`.
 
 ## Estructura
 
@@ -65,7 +116,8 @@ src/domain/              Reglas de negocio y calculo tarifario
 src/server/              Servidor HTTP y utilidades API
 src/storage/             Persistencia JSON local
 public/                  Interfaz web
-test/                    Pruebas unitarias automatizadas
+test/                    Pruebas unitarias, integracion e integracion HTTP
+e2e/                     Pruebas e2e reales de navegador con Playwright
 docs/                    Plan, trazabilidad y evidencia de pruebas
 data/                    Archivo JSON generado por la aplicacion
 ```
