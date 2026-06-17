@@ -21,7 +21,7 @@ test('operador registra entrada, liquida salida y ve la factura de tirilla', asy
 
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'ParkControl' })).toBeVisible();
-  await expect(page.getByText('Hecho por')).toContainText('Yerlinson Maturana');
+  await expect(page.getByText('Grupo 09')).toBeVisible();
 
   const entryForm = page.locator('#entry-form');
   await entryForm.locator('input[name="plate"]').fill(plate.toLowerCase());
