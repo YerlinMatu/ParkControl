@@ -1,0 +1,106 @@
+name: CI ParkControl
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  quality:
+    name: Tests, coverage and browser e2e
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run unit, integration and HTTP tests
+        run: npm test
+
+      - name: Run integration tests explicitly
+        run: npm run integration
+
+      - name: Run strict coverage
+        run: npm run coverage
+
+      - name: Run browser e2e tests
+        run: npm run e2e
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: outputs/playwright-report/
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Upload Playwright traces and screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  performance:
+    name: Performance smoke test
+    runs-on: ubuntu-latest
+    needs: quality
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run performance test and validate zero errors
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm start &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+
+          for attempt in {1..30}; do
+            if curl -fsS http://127.0.0.1:3000/api/dashboard >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+
+          curl -fsS http://127.0.0.1:3000/api/dashboard >/dev/null
+          npm run perf
+
+          node -e "const fs=require('node:fs'); const summary=JSON.parse(fs.readFileSync('performance/results/performance-summary.json','utf8')); const failed=summary.scenarios.filter((s)=>s.errorRate!==0); if (failed.length) { console.error('Performance scenarios with errors:', failed); process.exit(1); } console.log('Performance scenarios passed with 0% errors:', summary.scenarios.map((s)=>s.name).join(', '));"
+
+      - name: Upload performance results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-results
+          path: performance/results/
+          if-no-files-found: ignore
+          retention-days: 7
